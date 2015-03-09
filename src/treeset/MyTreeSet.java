@@ -24,7 +24,9 @@ public class MyTreeSet<T> {
 	private Comparator<T> comparator;
 	
 	public void add(T element){
-		
+		if (root == null){
+			root = new Node<T>();
+		}
 	}
 	
 	public void contains(T element){

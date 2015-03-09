@@ -9,6 +9,10 @@ public class Node<T> {
 	private Node<T> nextLargest;
 	
 	
+	Node(T value){
+		this.value = value;
+	}
+	
 	Node(T value, Node<T> nextSmallest, Node<T> nextLargest){
 		this.value = value;
 		this.nextSmallest = nextSmallest;

@@ -1,4 +1,13 @@
-
+/**
+ * The nodes represent the nodes in the class MyTreeSet.
+ * 
+ * @author Henrik Järnbrand 
+ * henrikjarnbrand@gmail.com
+ * @author Tomas Sandberg 
+ * tomassandberg86@hotmail.com
+ * @param <T>
+ * Generic type argument, represents the value to store in each node. 
+ */
 public class Node<T> {
 
 	T value;

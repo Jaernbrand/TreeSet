@@ -1,7 +1,8 @@
+package treeset;
 
-public class Node<T> {
+public class Node<T extends Comparable<T> > {
 
-	T value;
+	private T value;
 	private Node<T> leftChild;
 	private Node<T> rightChild;
 	
@@ -59,8 +60,7 @@ public class Node<T> {
 		this.nextLargest = nextLargest;
 	}
 	
-	
-}
+} // Node
 
 
 

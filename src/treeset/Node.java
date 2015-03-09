@@ -4,12 +4,13 @@ package treeset;
 /**
  * The nodes represent the nodes in the class MyTreeSet.
  * 
+ * @param <T>
+ * Generic type argument, represents the value to store in each node. 
+ * 
  * @author Henrik Järnbrand 
  * henrikjarnbrand@gmail.com
  * @author Tomas Sandberg 
  * tomassandberg86@hotmail.com
- * @param <T>
- * Generic type argument, represents the value to store in each node. 
  */
 class Node<T> {
 
@@ -34,6 +35,9 @@ class Node<T> {
 		rightChild = null;
 	}
 	
+	void setValue(T value){
+		this.value = value;
+	}
 	
 	T getValue(){
 		return value;
@@ -69,6 +73,15 @@ class Node<T> {
 	
 	void setNextLargest(Node<T> nextLargest){
 		this.nextLargest = nextLargest;
+	}
+	
+	/**
+	 * Returns the string representation of the node's value.
+	 * @return
+	 * - a string representing the node's value.
+	 */
+	public String toString(){
+		return value.toString();
 	}
 	
 } // Node

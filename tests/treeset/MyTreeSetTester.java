@@ -272,7 +272,6 @@ public class MyTreeSetTester {
 	}
 	
 	
-	
 	private MyTreeSet<Integer> get1000randomIntegers(){
 		Random rnd = new Random();
 		MyTreeSet<Integer> myTreeSet = new MyTreeSet<Integer>();
@@ -284,7 +283,6 @@ public class MyTreeSetTester {
 	}
 	
 	private MyTreeSet<Integer> add10Ints(MyTreeSet<Integer> treeSet){
-		
 		for(int i = 0; i < 10; ++i){
 			treeSet.add(i);
 		}
@@ -292,7 +290,6 @@ public class MyTreeSetTester {
 	}
 	
 	private TreeSet<Integer> add10Ints(TreeSet<Integer> treeSet){
-		
 		for(int i = 0; i < 10; ++i){
 			treeSet.add(i);
 		}
@@ -311,6 +308,10 @@ public class MyTreeSetTester {
 		assertFalse(iter.hasNext()); 		//empty
 		assertFalse(oracleIter.hasNext());  //empty
 
+		oracle = add10Ints(oracle);
+		treeSet = add10Ints(treeSet);
+		assertEquals(oracle.size(), treeSet.size());
+		
 		oracleIter = oracle.iterator();
 		iter = treeSet.iterator();
 		

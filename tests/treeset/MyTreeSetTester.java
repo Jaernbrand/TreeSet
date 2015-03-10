@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import treeset.MyTreeSet;
+
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -83,6 +86,28 @@ public class MyTreeSetTester {
 		}
 		assertEquals(oracle.size(), myTree.size());
 		assertEquals(oracle.toString(), myTree.toString());
+	}
+	
+	
+	@Test
+	public void testContainsComparable(){
+		Random rnd = new Random();
+		TreeSet<Integer> oracle = new TreeSet<Integer>();
+		MyTreeSet<Integer> myTreeSet = new MyTreeSet<Integer>();
+		
+		for(int i = 0; i < 1000; ++i){
+			Integer randomInt = rnd.nextInt(1000);
+			oracle.add(randomInt);
+			myTreeSet.add(randomInt);
+			
+			//if(rnd.nextBoolean()){
+				//assertEquals(oracle.size(), myTreeSet.size());				
+			//}
+		}
+		for(Integer in : oracle){
+			assertTrue(myTreeSet.contains(in));
+		}
+		//assertEquals(oracle.size(), myTreeSet.size());
 	}
 
 }

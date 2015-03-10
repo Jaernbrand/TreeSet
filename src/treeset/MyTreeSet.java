@@ -290,7 +290,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 		removeFromList( nextNode );
 		
 		return nextNode.getValue();
-	} // findReplacement
+	} // removeSmallestValue
 	
 	private void removeFromList(Node<T> toRemove){
 		Node<T> smaller = toRemove.getNextSmallest();

@@ -79,6 +79,7 @@ public class MyTreeSetTester {
 			myTree.remove(input[i]);
 			oracle.remove(input[i]);
 			assertEquals(oracle.size(), myTree.size());
+			assertEquals(oracle.toString(), myTree.toString());
 		}
 		assertEquals(oracle.size(), myTree.size());
 		assertEquals(oracle.toString(), myTree.toString());

@@ -41,11 +41,13 @@ public class MyTreeSet<T extends Comparable<T> > {
 		
 		if (root == null){
 			root = new Node<T>(element);
-			head.setNextLargest(root);
-			root.setNextSmallest(head);
+			addNewNodeToList(head, root);
+			/*head.setNextLargest(root);
+			root.setNextSmallest(head);*/ //TODO CLEAN!!
 			
-			root.setNextLargest(tail);
-			tail.setNextSmallest(root);
+			addNewNodeToList(root, tail);
+			/*root.setNextLargest(tail);
+			tail.setNextSmallest(root);*/
 			++size;
 		} else {
 			// TODO add compartor
@@ -70,7 +72,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 	private boolean add(T element, Node<T> subroot){
 		boolean valueAdded = true;
 		
-		T currVal = root.getValue();
+		T currVal = subroot.getValue();
 		if (currVal.compareTo(element) == 0){
 			valueAdded = false;
 			
@@ -79,7 +81,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 			if (leftChild == null){
 				leftChild = new Node<T>(element);
 				subroot.setLeftChild( leftChild );
-				addNewToList(leftChild, subroot);
+				addNewNodeToList(leftChild, subroot);
 				
 			} else {
 				add(element, leftChild);
@@ -92,7 +94,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 			if (rightChild == null){
 				rightChild = new Node<T>(element);
 				subroot.setRightChild( rightChild );
-				addNewToList(subroot, rightChild);
+				addNewNodeToList(subroot, rightChild);
 				
 			} else {
 				add(element, rightChild);
@@ -104,7 +106,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 		return valueAdded;
 	} // add
 	
-	private Node<T> findSmallest(Node<T> subroot){
+	/*private Node<T> findSmallest(Node<T> subroot){
 		Node<T> smallest = subroot;
 		
 		Node<T> leftChild = subroot.getLeftChild();
@@ -113,20 +115,20 @@ public class MyTreeSet<T extends Comparable<T> > {
 		}
 		
 		return smallest;
-	} // findSmallest
+	} // findSmallest*/
 	
-	private Node<T> findLargest(Node<T> subroot){
+	/*private Node<T> findLargest(Node<T> subroot){
 		Node<T> largest = subroot;
 		
 		Node<T> rightChild = subroot.getRightChild();
 		if (rightChild != null){
-			largest = findSmallest(rightChild);
+			largest = findSmallest(rightChild); // GRANSKA DENNA BIT!
 		}
 		
 		return largest;
-	} // findLargest
+	} // findLargest*/
 	
-	private void addNewToList(Node<T> smaller, Node<T> larger){
+	private void addNewNodeToList(Node<T> smaller, Node<T> larger){
 		if (smaller.getNextLargest() != null){
 			Node<T> tmpNode = smaller.getNextLargest();
 			
@@ -204,7 +206,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 		
 		if ( root != null){
 			//TODO remove comparator
-			remove(element, root);
+			root = remove(element, root);
 		}
 	} // remove
 	
@@ -234,10 +236,15 @@ public class MyTreeSet<T extends Comparable<T> > {
 
 			} else if (leftChild != null){
 				subroot = leftChild;
+				removeFromList( currNode );
+				
 			} else if (rightChild != null){
 				subroot = rightChild;
+				removeFromList( currNode );
+				
 			} else {
 				subroot = null;
+				removeFromList( currNode );
 			}
 			--size;
 			
@@ -276,13 +283,22 @@ public class MyTreeSet<T extends Comparable<T> > {
 		}
 		
 		if (nextNode.getRightChild() != null){
-			subroot.setLeftChild( nextNode.getRightChild() );
+			currNode.setLeftChild( nextNode.getRightChild() );
 		} else {
-			subroot.setLeftChild(null);
+			currNode.setLeftChild(null);
 		}
+		removeFromList( nextNode );
 		
 		return nextNode.getValue();
 	} // findReplacement
+	
+	private void removeFromList(Node<T> toRemove){
+		Node<T> smaller = toRemove.getNextSmallest();
+		Node<T> larger = toRemove.getNextLargest();
+		
+		smaller.setNextLargest( larger );
+		larger.setNextSmallest( smaller );
+	}
 	
 	/**
 	 * Returns the size of the set, i.e. the number of elements in the set.

@@ -39,6 +39,10 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		size = 0;
 	}
 	
+	/**
+	 * Creates an empty MyTreeSet object with the supplied comparator. 
+	 * Any comparisons between elements will be done with the comparator.
+	 */
 	public MyTreeSet(Comparator<T> comparator){
 		this();
 		this.comparator = comparator;
@@ -382,8 +386,14 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		Node<T> rightChild = currNode.getRightChild();
 		
 		if (leftChild != null && rightChild != null){
-			T newVal = removeSmallestValue( rightChild );
-			currNode.setValue( newVal );
+			//T newVal = removeSmallestValue( rightChild ); TODO
+			Node<T> smallestNode = removeSmallestValue( rightChild );
+			currNode.setValue( smallestNode.getValue() );
+			
+			if (smallestNode == rightChild){
+				currNode.setRightChild(smallestNode.getRightChild());
+			}
+			
 			retVal = currNode;
 
 		} else if (leftChild != null){
@@ -413,7 +423,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 * @return
 	 * the value of the smallest value in the subtree
 	 */
-	private T removeSmallestValue(Node<T> subroot){
+	private Node<T> removeSmallestValue(Node<T> subroot){
 		Node<T> parentNode = subroot;
 		Node<T> nextNode = subroot;
 		
@@ -422,11 +432,13 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			nextNode = nextNode.getLeftChild();
 		}
 		
-		parentNode.setLeftChild( nextNode.getRightChild() );
+		if (parentNode != nextNode){
+			parentNode.setLeftChild( nextNode.getRightChild() );
+		}
 		
 		removeFromList( nextNode );
 		
-		return nextNode.getValue();
+		return nextNode;
 	} // removeSmallestValue
 	
 	/**

@@ -251,7 +251,7 @@ public class MyTreeSetTester {
 	
 	@Test
 	public void testAddAndRemoveMultipleElementsComparator(){
-		MyTreeSet compTree = new MyTreeSet(new IntegerComparator());
+		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator());
 		Integer[] input = {5, 6, 4, 7, 3, 8, 2, 9, 1, 10};
 		Set<Integer> oracle = new TreeSet<Integer>(new IntegerComparator());
 		
@@ -277,7 +277,45 @@ public class MyTreeSetTester {
 	
 	@Test
 	public void testAddAndRemoveMultipleRandomElementsAndWithComparator(){
+		Random rnd = new Random();
+		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator());
+		TreeSet<Integer> oracle = new TreeSet<Integer>( new IntegerComparator());
 		
+		assertEquals(0, compTree.size());
+		assertEquals(0, oracle.size());
+		
+		for (int i=0; i < 1000; ++i){
+			Integer newVal = rnd.nextInt(1000);
+			compTree.add(newVal);
+			oracle.add(newVal);
+			
+			assertTrue( compTree.contains(newVal) );
+			assertTrue( oracle.contains(newVal) );
+			
+			assertEquals(oracle.toString(), compTree.toString());
+			assertEquals(oracle.size(), compTree.size());
+			
+			
+			Iterator<Integer> oracleIter = oracle.iterator();
+			while (compTree.size() > 0 && rnd.nextBoolean() ){
+				Integer tmpVal = oracleIter.next();
+				compTree.remove(tmpVal);
+				oracleIter.remove();
+				assertFalse(compTree.contains(tmpVal) );
+				assertFalse(oracle.contains(tmpVal) );
+			}
+			
+			assertEquals(oracle.size(), compTree.size());
+			
+			for (Integer oracleVal : oracle){
+				assertTrue(compTree.contains(oracleVal) );
+			}
+			
+			assertEquals(oracle.toString(), compTree.toString());
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
 	}
 	
 	@Test

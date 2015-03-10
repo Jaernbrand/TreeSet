@@ -478,10 +478,17 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 */
 	private class MyTreeSetIterator implements Iterator<T>{
 
-		private Node<T> currentNode = head;
-		private int expectedCount = modCount;
-		private boolean removalValid = false;
+		private Node<T> currentNode;
+		private int expectedCount;
+		private boolean removalValid;
 		
+		
+		
+		public MyTreeSetIterator(){
+			expectedCount = modCount;
+			removalValid = false;
+			currentNode = head;
+		}
 		
 		/**
 		 * Checks that the currentNode isn't the last one. If it is, returns false.
@@ -491,13 +498,13 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			if(size == 0)
 				return false;
 			else
-				return currentNode.getNextLargest() != null;			
+				return currentNode.getNextLargest().getValue() != null;			
 		}
 
 
 		
 		/**
-		 * Allows the next element to be retrieved if the index is valid and no 
+		 * Allows the next element to be retrieved if the currentNode is valid and no 
 		 * modifications has been made other than those made by the iterator.
 		 * Sets removalValid to true before returning the element. 
 		 */
@@ -507,7 +514,8 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			if(expectedCount != modCount)
 				throw new java.util.ConcurrentModificationException();
 			removalValid = true;
-			return currentNode.getNextLargest().getValue();
+			currentNode = currentNode.getNextLargest();
+			return currentNode.getValue();
 		}
 
 		
@@ -524,8 +532,10 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				throw new java.util.ConcurrentModificationException();
 			removalValid = false;
 			++expectedCount;
-			MyTreeSet.this.remove(currentNode.getValue());
-		}
+			Node<T> temp = currentNode; 
+			MyTreeSet.this.remove(currentNode.getValue()); //The value is removed but the node is kept
+			currentNode = temp;							   //outside the set as a reference, making
+		}												   //it possible to reach the next node if there is one.
 		
 	} // MyTreeSetIterator
 	

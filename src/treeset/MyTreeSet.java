@@ -70,7 +70,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 	private boolean add(T element, Node<T> subroot){
 		boolean valueAdded = true;
 		
-		T currVal = root.getValue();
+		T currVal = subroot.getValue();
 		if (currVal.compareTo(element) == 0){
 			valueAdded = false;
 			

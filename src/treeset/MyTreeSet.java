@@ -363,7 +363,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 
 		
 		/**
-		 * Allows the next element to be retrieved if the index is valid and no 
+		 * Allows the next element to be retrieved if the currentNode is valid and no 
 		 * modifications has been made other than those made by the iterator.
 		 * Sets removalValid to true before returning the element. 
 		 */

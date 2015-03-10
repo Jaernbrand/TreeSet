@@ -282,7 +282,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 		}
 		
 		return nextNode.getValue();
-	} // findReplacement
+	} // removeSmallestValue
 	
 	/**
 	 * Returns the size of the set, i.e. the number of elements in the set.

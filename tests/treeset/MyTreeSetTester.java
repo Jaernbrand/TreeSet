@@ -248,6 +248,32 @@ public class MyTreeSetTester {
 	}
 	
 	@Test
+	public void testAddAndRemoveMultipleElementsComparator(){
+		MyTreeSet compTree = new MyTreeSet(new IntegerComparator());
+		Integer[] input = {5, 6, 4, 7, 3, 8, 2, 9, 1, 10};
+		Set<Integer> oracle = new TreeSet<Integer>();
+		
+		assertEquals(0, myTree.size());
+		
+		for (int i=0; i<input.length; ++i){
+			compTree.add(input[i]);
+			oracle.add(input[i]);
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+		
+		for (int i=0; i<input.length; ++i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());
+		}
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+	}
+	
+	@Test
 	public void testIteratorWithRandomIntegers(){
 		Random rnd = new Random();
 		TreeSet<Integer> oracle = new TreeSet<Integer>();

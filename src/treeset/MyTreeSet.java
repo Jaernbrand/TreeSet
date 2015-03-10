@@ -39,6 +39,11 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		size = 0;
 	}
 	
+	public MyTreeSet(Comparator<T> comparator){
+		this();
+		this.comparator = comparator;
+	}
+	
 	/**
 	 * Adds one element to the set. Does nothing if the set already contains 
 	 * the element.

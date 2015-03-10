@@ -5,9 +5,9 @@ import java.util.Comparator;
 
 
 /**
- * Set based on a binary search tree. No duplicates.
- * The elements in the set are kept in order. 
- * Either by using the compareTo-method or the supplied comparator.
+ * Set based on a binary search tree. The elements in the set are kept in order.
+ * Either by using the compareTo-method or the supplied comparator. The set does 
+ * not contain any duplicates.
  *
  * @param <T>
  * - the datatype of the elements contained in the set
@@ -79,7 +79,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				++size;
 				++modCount;
 				
-			} else if ( add(element, root) ){
+			} else if ( comparator == null && add(element, root) ){
 				++size;
 				++modCount;
 			}

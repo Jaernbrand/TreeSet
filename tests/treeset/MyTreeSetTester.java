@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.ArrayList;
 
 public class MyTreeSetTester {
 
@@ -276,10 +277,82 @@ public class MyTreeSetTester {
 	}
 	
 	@Test
+	public void testAddAndRemoveRightHeavyTreeComparator(){
+		Integer[] input = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator());
+		TreeSet<Integer> oracle = new TreeSet<Integer>(new IntegerComparator());
+		
+		addInputArrayToTree(input, compTree, oracle);
+		
+		for (int i=0; i < input.length; ++i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertFalse(compTree.contains(input[i]));
+			
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());	
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+		
+		addInputArrayToTree(input, compTree, oracle);
+		
+		for (int i=input.length-1; i >= 0; --i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertFalse(compTree.contains(input[i]));
+			
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());	
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+	}
+	
+	@Test
+	public void testAddAndRemoveLeftHeavyTreeComparator(){
+		Integer[] input = {15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator());
+		TreeSet<Integer> oracle = new TreeSet<Integer>(new IntegerComparator() );
+		
+		addInputArrayToTree(input, compTree, oracle);
+		
+		for (int i=0; i < input.length; ++i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertFalse(compTree.contains(input[i]));
+			
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());	
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+		
+		addInputArrayToTree(input, compTree, oracle);
+		
+		for (int i=input.length-1; i >= 0; --i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertFalse(compTree.contains(input[i]));
+			
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());	
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+	}
+	
+	@Test
 	public void testAddAndRemoveMultipleRandomElementsAndWithComparator(){
 		Random rnd = new Random();
 		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator());
 		TreeSet<Integer> oracle = new TreeSet<Integer>( new IntegerComparator());
+		
+		ArrayList<Integer> addHistory = new ArrayList<Integer>();
 		
 		assertEquals(0, compTree.size());
 		assertEquals(0, oracle.size());
@@ -289,9 +362,14 @@ public class MyTreeSetTester {
 			compTree.add(newVal);
 			oracle.add(newVal);
 			
+			addHistory.add(newVal);
+			
 			assertTrue( compTree.contains(newVal) );
 			assertTrue( oracle.contains(newVal) );
 			
+			if (oracle.size() != compTree.size()){
+				int forDebuggingPurpuses = -1;
+			}
 			assertEquals(oracle.toString(), compTree.toString());
 			assertEquals(oracle.size(), compTree.size());
 			
@@ -312,6 +390,78 @@ public class MyTreeSetTester {
 			}
 			
 			assertEquals(oracle.toString(), compTree.toString());
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+	}
+	
+	@Test
+	public void testAddDuplicateComparator(){
+		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>();
+		TreeSet<Integer> oracle = new TreeSet<Integer>();
+		
+		assertEquals(0, compTree.size());
+		assertEquals(0, oracle.size());
+		assertEquals(oracle.toString(), compTree.toString());
+		
+		compTree.add(5);
+		oracle.add(5);
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+		assertTrue(compTree.contains(5));
+		assertTrue(oracle.contains(5));
+		
+		compTree.add(5);
+		oracle.add(5);
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+	}
+	
+	@Test
+	public void testRecreatingFailAddAndRemoveRandomComparator(){
+		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator() );
+		Integer[] input = {59, 271, 11, 369, 169, 7, 392, 301, 645, 864, 392};
+		
+		for (int i=0; i < input.length; ++i){
+			compTree.add(input[i]);
+			assertTrue(compTree.contains(input[i]));
+		}
+		
+		assertEquals(input.length-1, compTree.size());
+	}
+	
+	@Test
+	public void testAddAndRemoveRootUntilEmptyTreeComparator(){
+		Integer[] input = {100, 50, 150, 120, 200, 220, 250, 300, 320, 350};
+		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator());
+		TreeSet<Integer> oracle = new TreeSet<Integer>(new IntegerComparator() );
+		
+		addInputArrayToTree(input, compTree, oracle);
+		
+		for (int i=0; i < input.length; ++i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertFalse(compTree.contains(input[i]));
+			
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());	
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+		
+		addInputArrayToTree(input, compTree, oracle);
+		
+		for (int i=input.length-1; i >= 0; --i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertFalse(compTree.contains(input[i]));
+			
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());	
 		}
 		
 		assertEquals(oracle.size(), compTree.size());

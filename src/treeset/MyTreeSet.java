@@ -336,7 +336,6 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	} // iterator
 	
 	
-
 	/**
 	 * MyTreeSetIterator implements the iterator interface. 
 	 * 
@@ -346,8 +345,6 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		private Node<T> currentNode;
 		private int expectedCount;
 		private boolean removalValid;
-		
-		
 		
 		public MyTreeSetIterator(){
 			expectedCount = modCount;
@@ -404,7 +401,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			MyTreeSet.this.remove(currentNode.getValue()); //The value is removed but the node is kept
 			currentNode = temp;							   //outside the set as a refference, making
 		}												   //it possible to reach the next node if there is one.
-		
+														   //Next node can only be reached by explicitly calling next().
 	}
 	
 } // MyTreeSet

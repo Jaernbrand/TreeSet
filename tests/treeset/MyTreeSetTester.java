@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import treeset.MyTreeSet;
 
+import java.util.ConcurrentModificationException;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
@@ -260,14 +262,111 @@ public class MyTreeSetTester {
 			myTreeSet.add(randomInt);
 			
 			if(rnd.nextBoolean()){
-				//assertEquals(oracle.size(), myTreeSet.size());
+				assertEquals(oracle.size(), myTreeSet.size());
 				for(Integer in : oracle){
 					assertTrue(myTreeSet.contains(in));
 				}
 			}
 		}
-		
-		//assertEquals(oracle.size(), myTreeSet.size());
+		assertEquals(oracle.size(), myTreeSet.size());
 	}
+	
+	
+	
+	private MyTreeSet<Integer> get1000randomIntegers(){
+		Random rnd = new Random();
+		MyTreeSet<Integer> myTreeSet = new MyTreeSet<Integer>();
+		for(int i = 0; i < 1000; ++i){
+			Integer randomInt = rnd.nextInt(1000);
+			myTreeSet.add(randomInt);
+		}
+		return myTreeSet;
+	}
+	
+	private MyTreeSet<Integer> add10Ints(MyTreeSet<Integer> treeSet){
+		
+		for(int i = 0; i < 10; ++i){
+			treeSet.add(i);
+		}
+		return treeSet;
+	}
+	
+	private TreeSet<Integer> add10Ints(TreeSet<Integer> treeSet){
+		
+		for(int i = 0; i < 10; ++i){
+			treeSet.add(i);
+		}
+		return treeSet;
+	}
+	
+	
+	@Test
+	public void testIterator(){
+		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>();
+		TreeSet<Integer> oracle = new TreeSet<Integer>();
+		
+		Iterator<Integer> iter = treeSet.iterator();
+		Iterator<Integer> oracleIter = oracle.iterator();
+		
+		assertFalse(iter.hasNext()); 		//empty
+		assertFalse(oracleIter.hasNext());  //empty
 
+		oracleIter = oracle.iterator();
+		iter = treeSet.iterator();
+		
+		//emptying treeSet
+		while(iter.hasNext()){
+			iter.next();
+			iter.remove();
+		}
+		//emptying oracle
+		while(oracleIter.hasNext()){
+			oracleIter.next();
+			oracleIter.remove();
+		}
+		assertEquals(oracle.size(), treeSet.size());	
+	}
+	
+	@Test (expected=ConcurrentModificationException.class)
+	public void testIteratorConcurrentException(){
+		
+		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>();
+		Iterator<Integer> iter = treeSet.iterator();
+		treeSet = add10Ints(treeSet);
+		iter.hasNext();
+		iter.next();
+	}
+	
+	@Test (expected=ConcurrentModificationException.class)
+	public void testIteratorConcurrentExceptionAtRemove(){
+		
+		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>();
+		Iterator<Integer> iter = treeSet.iterator();
+		treeSet = add10Ints(treeSet);
+		iter.next();
+		iter.remove();
+	}
+	
+	@Test (expected=NoSuchElementException.class)
+	public void testIteratorNoSuchElementException(){
+		
+		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>();
+		Iterator<Integer> iter = treeSet.iterator();
+		iter.hasNext();
+		iter.next();
+	}
+	
+	
+	@Test (expected=IllegalStateException.class)
+	public void testIteratorIllegalStateException(){
+		
+		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>();
+		Iterator<Integer> iter = treeSet.iterator();
+		iter.hasNext();
+		iter.remove();
+	}
+	
+		
 }
+
+

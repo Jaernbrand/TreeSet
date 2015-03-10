@@ -100,13 +100,14 @@ public class MyTreeSetTester {
 			oracle.add(randomInt);
 			myTreeSet.add(randomInt);
 			
-			//if(rnd.nextBoolean()){
-				//assertEquals(oracle.size(), myTreeSet.size());				
-			//}
+			if(rnd.nextBoolean()){
+				//assertEquals(oracle.size(), myTreeSet.size());
+				for(Integer in : oracle){
+					assertTrue(myTreeSet.contains(in));
+				}
+			}
 		}
-		for(Integer in : oracle){
-			assertTrue(myTreeSet.contains(in));
-		}
+		
 		//assertEquals(oracle.size(), myTreeSet.size());
 	}
 

@@ -15,7 +15,7 @@ import java.util.Comparator;
  * @author Tomas Sandberg 
  * tomassandberg86@hotmail.com
  */
-public class MyTreeSet<T extends Comparable<T> > {
+public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 
 	private Node<T> root;
 	private Node<T> head = new Node<T>(null);
@@ -23,6 +23,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 	
 	private int size = 0;
 	private Comparator<T> comparator;
+	private int modCount = 0;
 	
 	/**
 	 * Adds one element to the set. Does nothing if the set already contains 
@@ -53,6 +54,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 			// TODO add compartor
 			if ( add(element, root) ){
 				++size;
+				++modCount;
 			}
 		}
 	} // add
@@ -247,6 +249,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 				removeFromList( currNode );
 			}
 			--size;
+			--modCount;
 			
 		} else if (currVal.compareTo(element) > 0){
 			Node<T> leftChild = currNode.getLeftChild();
@@ -309,9 +312,7 @@ public class MyTreeSet<T extends Comparable<T> > {
 		return size;
 	} // size
 	
-	public Iterator<T> iterator(){
-		return null;
-	} // iterator
+
 	
 	/**
 	 * Returns a string representation of the set.
@@ -332,6 +333,77 @@ public class MyTreeSet<T extends Comparable<T> > {
 		}
 		
 		return "[" + builder.toString() + "]";
+	}
+
+	
+	/**
+	 * Returns an iterator belonging to MyTreeSet.
+	 */
+	@Override
+	public Iterator<T> iterator(){
+		return new MyTreeSetIterator();
+	} // iterator
+	
+	
+
+	/**
+	 * MyTreeSetIterator implements the iterator interface. 
+	 * 
+	 */
+	private class MyTreeSetIterator implements Iterator<T>{
+
+		private Node<T> currentNode = head;
+		private int expectedCount = modCount;
+		private boolean removalValid = false;
+		
+		
+		/**
+		 * Checks that the currentNode isn't the last one. If it is, returns false.
+		 * Also returns false if the set is empty. 
+		 */
+		@Override
+		public boolean hasNext() {
+			if(size == 0)
+				return false;
+			else
+				return currentNode.getNextLargest() != null;			
+		}
+
+
+		
+		/**
+		 * Allows the next element to be retrieved if the index is valid and no 
+		 * modifications has been made other than those made by the iterator.
+		 * Sets removalValid to true before returning the element. 
+		 */
+		@Override
+		public T next() {
+			if(!hasNext())
+				throw new java.util.NoSuchElementException();
+			if(expectedCount != modCount)
+				throw new java.util.ConcurrentModificationException();
+			removalValid = true;
+			return currentNode.getNextLargest().getValue();
+		}
+
+		
+		/**
+		 * If the next element has been returned by next() and no modifications has been
+		 * done other than changes made by the iterator, the element is removed. 
+		 * After setting removalValid to false, forcing a call to next() before removing 
+		 * another element, expectedCount is incremented as is modCount in the list.  
+		 */
+		@Override
+		public void remove() {
+			if(!removalValid)
+				throw new IllegalStateException();
+			if(expectedCount != modCount)
+				throw new java.util.ConcurrentModificationException();
+			removalValid = false;
+			++expectedCount;
+			MyTreeSet.this.remove(currentNode.getValue());
+		}
+		
 	}
 	
 } // MyTreeSet

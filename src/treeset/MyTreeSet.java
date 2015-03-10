@@ -6,7 +6,8 @@ import java.util.Comparator;
 
 /**
  * Set based on a binary search tree. No duplicates.
- *
+ * The elements in the set are kept in order. 
+ * Either by using the compareTo-method or the supplied comparator.
  *
  * @param <T>
  * - the datatype of the elements contained in the set
@@ -39,6 +40,13 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		size = 0;
 	}
 	
+	
+	/**
+	 * Creates an empty MyTreeSet object and installs the supplied comparator.
+	 * 
+	 * @param comparator
+	 * The comparator that is to be used to compare elements in the set.
+	 */
 	public MyTreeSet(Comparator<T> comparator){
 		this();
 		this.comparator = comparator;
@@ -65,7 +73,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			addNewNodeToList(root, tail);
 			
 			++size;
-			
+			++modCount;
 		} else {
 			if (comparator != null && addWithComperator(element, root) ){
 				++size;
@@ -199,7 +207,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 * Adds one new node to the linked list spanning the tree. One of the nodes 
 	 * is assumed to be smaller than the other node. It's also assumed that one
 	 * node is new and is NOT in the list. The new node's nextLargest and 
-	 * nextSmallest references have to be null, for the method to work properly.
+	 * nextSmallest references have to be null for the method to work properly.
 	 * 
 	 * @param smaller
 	 * - the smaller of the two nodes
@@ -226,13 +234,14 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	
 	/**
 	 * Checks if the element is present in the TreeSet.
-	 * Calls
+	 * If a comparator has been added to the set it is used to search for the element. 
+	 * If there is no comparator the compareTo method is used.
 	 * @param element
 	 * The element to search for.
 	 * @return
 	 * True if the element is present, otherwise false.
+	 * False if the root is empty.
 	 */
-	
 	public boolean contains(T element){
 		if(element == null){
 			throw new NullPointerException("Element can't be null.");
@@ -247,6 +256,17 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	}//contains
 	
 	
+	/**
+	 * Searches for the element using compareTo.
+	 * 
+	 * @param toSearch
+	 * The root of the current subtree.
+	 * @param element
+	 * The element to search for.
+	 * @return
+	 * True if the element is present, otherwise false.
+	 * False if the root is empty. 
+	 */
 	private boolean containsWithComparable(Node<T> toSearch, T element){
 		if(toSearch == null){
 			return false;
@@ -262,7 +282,17 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	}//containsComparable
 	
 	
-	
+	/**
+	 * Searches for the element using the comparator.
+	 * 
+	 * @param toSearch
+	 * The root of the current subtree.
+	 * @param element
+	 * The element to search for.
+	 * @return
+	 * True if the element is present, otherwise false.
+	 * False if the root is empty. 
+	 */
 	private boolean containsWithComparator(Node<T> toSearch, T element){
 		if(toSearch == null){
 			return false;
@@ -276,6 +306,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			return containsWithComparator(toSearch.getLeftChild(), element);
 		}
 	}//containsComparator
+	
 	
 	/**
 	 * Removes the specified element from the set. Does nothing if the set doesn't
@@ -367,6 +398,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		return newSubroot;
 	} // removeWithComparator
 	
+	
 	/**
 	 * Removes the supplied node from the tree.
 	 * 
@@ -399,7 +431,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			removeFromList( currNode );
 		}
 		--size;
-		--modCount;
+		++modCount;
 		
 		return retVal;
 	}
@@ -529,7 +561,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		
 		/**
 		 * If the next element has been returned by next() and no modifications has been
-		 * done other than changes made by the iterator, the element is removed. 
+		 * done, other than changes made by the iterator, the element is removed. 
 		 * After setting removalValid to false, forcing a call to next() before removing 
 		 * another element, expectedCount is incremented as is modCount in the list.  
 		 */

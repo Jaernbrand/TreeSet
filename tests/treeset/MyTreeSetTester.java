@@ -321,7 +321,7 @@ public class MyTreeSetTester {
 		myTree.add(5);
 		assertEquals(1, myTree.size());
 		Iterator<Integer> myIter = myTree.iterator();
-		for (int i=0; i >= myTree.size(); ++i){
+		for (int i=0; i <= myTree.size(); ++i){
 			myIter.next();
 		}
 	}

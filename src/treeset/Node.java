@@ -81,7 +81,11 @@ class Node<T> {
 	 * - a string representing the node's value.
 	 */
 	public String toString(){
-		return value.toString();
+		String retString = null;
+		if (value != null){
+			retString = value.toString();
+		}
+		return retString;
 	}
 	
 } // Node

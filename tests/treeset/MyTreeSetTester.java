@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class MyTreeSetTester {
 
@@ -125,8 +126,6 @@ public class MyTreeSetTester {
 				assertTrue(myTree.contains(oracleVal) );
 			}
 			
-			assertEquals(myTree.size(), myTree.getListSize());
-			assertEquals(oracle.size(), myTree.getListSize());
 			assertEquals(oracle.toString(), myTree.toString());
 		}
 		
@@ -248,6 +247,89 @@ public class MyTreeSetTester {
 		
 		assertEquals(oracle.size(), myTree.size());
 		assertEquals(oracle.toString(), myTree.toString());
+	}
+	
+	@Test
+	public void testAddAndRemoveMultipleElementsComparator(){
+		MyTreeSet compTree = new MyTreeSet(new IntegerComparator());
+		Integer[] input = {5, 6, 4, 7, 3, 8, 2, 9, 1, 10};
+		Set<Integer> oracle = new TreeSet<Integer>();
+		
+		assertEquals(0, myTree.size());
+		
+		for (int i=0; i<input.length; ++i){
+			compTree.add(input[i]);
+			oracle.add(input[i]);
+		}
+		
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+		
+		for (int i=0; i<input.length; ++i){
+			compTree.remove(input[i]);
+			oracle.remove(input[i]);
+			assertEquals(oracle.size(), compTree.size());
+			assertEquals(oracle.toString(), compTree.toString());
+		}
+		assertEquals(oracle.size(), compTree.size());
+		assertEquals(oracle.toString(), compTree.toString());
+	}
+	
+	@Test
+	public void testIteratorWithRandomIntegers(){
+		Random rnd = new Random();
+		TreeSet<Integer> oracle = new TreeSet<Integer>();
+		
+		assertEquals(0, myTree.size());
+		assertEquals(0, oracle.size());
+		
+		for (int i=0; i < 500; ++i){
+			Integer newVal = rnd.nextInt(1000);
+			myTree.add(newVal);
+			oracle.add(newVal);
+			
+			assertTrue( myTree.contains(newVal) );
+			assertTrue( oracle.contains(newVal) );
+			
+			assertEquals(oracle.size(), myTree.size());
+			assertEquals(oracle.toString(), myTree.toString());
+		}
+		
+		assertEquals(oracle.size(), myTree.size());
+		assertEquals(oracle.toString(), myTree.toString());
+		
+		Iterator<Integer> myIter = myTree.iterator();
+		for (Integer e : oracle){ // Fungerar bara om oraklets iterator går från minsta till största.
+			Integer tmp = myIter.next();
+			assertEquals(e, tmp);
+		}
+		
+		assertEquals(oracle.size(), myTree.size());
+		assertEquals(oracle.toString(), myTree.toString());
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void testIteratorRemoveWithoutCallingNext(){
+		myTree.add(5);
+		assertEquals(1, myTree.size());
+		Iterator<Integer> myIter = myTree.iterator();
+		myIter.remove();
+	}
+	
+	@Test(expected=NoSuchElementException.class)
+	public void testOneToManyNextOnIterator(){
+		myTree.add(5);
+		assertEquals(1, myTree.size());
+		Iterator<Integer> myIter = myTree.iterator();
+		for (int i=0; i >= myTree.size(); ++i){
+			myIter.next();
+		}
+	}
+	
+	@Test
+	public void testEmptyIterator(){
+		Iterator<Integer> myIter = myTree.iterator();
+		assertFalse(myIter.hasNext());
 	}
 	
 	@Test

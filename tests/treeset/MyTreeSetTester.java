@@ -123,8 +123,6 @@ public class MyTreeSetTester {
 				assertTrue(myTree.contains(oracleVal) );
 			}
 			
-			assertEquals(myTree.size(), myTree.getListSize());
-			assertEquals(oracle.size(), myTree.getListSize());
 			assertEquals(oracle.toString(), myTree.toString());
 		}
 		

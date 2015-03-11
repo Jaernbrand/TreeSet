@@ -206,7 +206,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	/**
 	 * Adds one new node to the linked list spanning the tree. One of the nodes 
 	 * is assumed to be smaller than the other node. It's also assumed that one
-	 * node is new and is NOT in the list. The new node's nextLargest and 
+	 * node is new and NOT in the list. The otherThe new node's nextLargest and 
 	 * nextSmallest references have to be null for the method to work properly.
 	 * 
 	 * @param smaller
@@ -215,6 +215,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 * - the larger of the two nodes
 	 */
 	private void addNewNodeToList(Node<T> smaller, Node<T> larger){
+
 		if (smaller.getNextLargest() != null){
 			Node<T> tmpNode = smaller.getNextLargest();
 			
@@ -444,12 +445,17 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	
 	/**
 	 * Auxiliary method for remove. Finds the smallest value in the specified 
-	 * subtree and returns it. The node containing the value is removed. 
+	 * subtree and returns it. The node containing the value is removed.
+	 * As long as the smallest value isn't in the subroot, then the right 
+	 * subtree of the smallest node is passed on to the parent node
+	 * as the parent new left node. If the smallest value instead is in the 
+	 * subroot, then the smallest value will only be removed from the list, and
+	 * NOT from the tree itself.
 	 * 
 	 * @param subroot
 	 * - the root from which to search for the smallest value
 	 * @return
-	 * the value of the smallest value in the subtree
+	 * the node containing the smallest value in the subtree
 	 */
 	private Node<T> removeSmallestValue(Node<T> subroot){
 		Node<T> parentNode = subroot;

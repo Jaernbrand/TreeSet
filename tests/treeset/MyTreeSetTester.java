@@ -367,9 +367,7 @@ public class MyTreeSetTester {
 			assertTrue( compTree.contains(newVal) );
 			assertTrue( oracle.contains(newVal) );
 			
-			if (oracle.size() != compTree.size()){
-				int forDebuggingPurpuses = -1;
-			}
+			
 			assertEquals(oracle.toString(), compTree.toString());
 			assertEquals(oracle.size(), compTree.size());
 			
@@ -420,6 +418,8 @@ public class MyTreeSetTester {
 		assertEquals(oracle.toString(), compTree.toString());
 	}
 	
+	// Tests so that one element isn't added with compareTo-add when it should
+	// be added (or not added) according to comparator-add.
 	@Test
 	public void testRecreatingFailAddAndRemoveRandomComparator(){
 		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator() );
@@ -617,9 +617,10 @@ public class MyTreeSetTester {
 	public void testIteratorConcurrentExceptionAtRemove(){
 		
 		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>();
+		treeSet.add(999);
 		Iterator<Integer> iter = treeSet.iterator();
-		treeSet = add10Ints(treeSet);
 		iter.next();
+		treeSet = add10Ints(treeSet);
 		iter.remove();
 	}
 	

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import treeset.MyTreeSet;
 
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -277,6 +278,21 @@ public class MyTreeSetTester {
 	}
 	
 	@Test
+	public void addSameElementTwice(){
+		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>();
+		treeSet.add(5);
+		treeSet.add(5);
+	}
+	
+	
+	@Test (expected=NullPointerException.class)
+	public void testIteratorNullReference(){
+		Comparator<Integer> comp = null;
+		MyTreeSet<Integer> treeSet = new MyTreeSet<Integer>(comp);
+	}
+	
+	
+	@Test
 	public void testAddAndRemoveRightHeavyTreeComparator(){
 		Integer[] input = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 		MyTreeSet<Integer> compTree = new MyTreeSet<Integer>(new IntegerComparator());
@@ -546,16 +562,6 @@ public class MyTreeSetTester {
 		assertEquals(oracle.size(), myTreeSet.size());
 	}
 	
-	
-	private MyTreeSet<Integer> get1000randomIntegers(){
-		Random rnd = new Random();
-		MyTreeSet<Integer> myTreeSet = new MyTreeSet<Integer>();
-		for(int i = 0; i < 1000; ++i){
-			Integer randomInt = rnd.nextInt(1000);
-			myTreeSet.add(randomInt);
-		}
-		return myTreeSet;
-	}
 	
 	private MyTreeSet<Integer> add10Ints(MyTreeSet<Integer> treeSet){
 		for(int i = 0; i < 10; ++i){

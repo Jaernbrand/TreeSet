@@ -132,8 +132,8 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				return add(element, rightChild);
 			}
 			
-		} 
-		return false;
+		}
+		throw new UnsupportedOperationException("The element should have been detected as either smaller, larger or equal.");
 	} // add
 	
 	/**
@@ -177,7 +177,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			}
 			
 		} 
-		return false;	
+		throw new UnsupportedOperationException("The element should have been detected as either smaller, larger or equal.");	
 	} //addWithComparator
 	
 	/**
@@ -426,7 +426,6 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		Node<T> rightChild = currNode.getRightChild();
 		
 		if (leftChild != null && rightChild != null){
-			//T newVal = removeSmallestValue( rightChild ); TODO
 			Node<T> smallestNode = removeSmallestValue( rightChild );
 			currNode.setValue( smallestNode.getValue() );
 			
@@ -590,6 +589,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				throw new ConcurrentModificationException();
 			removalValid = true;
 			currentNode = currentNode.getNextLargest();
+			
 			return currentNode.getValue();
 		}
 

@@ -649,7 +649,36 @@ public class MyTreeSetTester {
 		iter.remove();
 	}
 	
+	
+	@Test
+	public void newSuperTest(){
+		MyTreeSet<Integer> tree = new MyTreeSet<Integer>();
+		TreeSet<Integer> oracle = new TreeSet<Integer>();
+		Random rnd = new Random();
+		
+		for(int i = 0; i < 1000000; ++i){
+			int randInt = rnd.nextInt(5000000);
+			tree.add(randInt);
+			oracle.add(randInt);
+		}
+		assertEquals(oracle.size(), tree.size());
+		
+		int count = 0;
+		for(Integer i : oracle){
+			assertEquals(oracle.size()-count, tree.size());
+			tree.remove(i);
+			++count;
+		}
+		assertEquals(0, tree.size());
+	}
+	
 		
 }
+
+
+
+
+
+
 
 

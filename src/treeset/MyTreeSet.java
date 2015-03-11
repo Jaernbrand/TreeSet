@@ -1,8 +1,8 @@
 package treeset;
 
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
 
@@ -567,7 +567,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				return false;
 			else
 				return currentNode.getNextLargest().getValue() != null;			
-		}
+		}//hasNext
 
 
 		
@@ -591,7 +591,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			currentNode = currentNode.getNextLargest();
 			
 			return currentNode.getValue();
-		}
+		}//next
 
 		
 		/**
@@ -616,7 +616,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			Node<T> temp = currentNode; 
 			MyTreeSet.this.remove(currentNode.getValue()); //The value is removed but the node is kept
 			currentNode = temp;							   //outside the set as a reference, making
-		}												   //it possible to reach the next node if there is one.
+		}//remove										   //it possible to reach the next node if there is one.
 														   //Next node can only be reached by explicitly calling next().
 	} // MyTreeSetIterator
 	

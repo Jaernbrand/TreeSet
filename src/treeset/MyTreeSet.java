@@ -1,7 +1,9 @@
 package treeset;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -25,7 +27,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	
 	private int size;
 	private Comparator<T> comparator;
-	private int modCount = 0;
+	private int modCount;
 	
 	/**
 	 * Creates an empty MyTreeSet object.
@@ -38,6 +40,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		tail.setNextSmallest(head);
 		
 		size = 0;
+		modCount = 0;
 	}
 	
 	/**
@@ -49,6 +52,10 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 */
 	public MyTreeSet(Comparator<T> comparator){
 		this();
+		
+		if(comparator == null){
+			throw new NullPointerException("Comparator can't be null.");
+		}
 		this.comparator = comparator;
 	}
 	
@@ -75,7 +82,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			++size;
 			++modCount;
 		} else {
-			if (comparator != null && addWithComperator(element, root) ){
+			if (comparator != null && addWithComparator(element, root) ){
 				++size;
 				++modCount;
 				
@@ -97,7 +104,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 * @param subroot
 	 * - the root of the subtree in which to add the element.
 	 * @return
-	 * true if the element was added to the set.
+	 * true if the element was added to the set, otherwise false.
 	 */
 	private boolean add(T element, Node<T> subroot){
 		
@@ -125,8 +132,8 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				return add(element, rightChild);
 			}
 			
-		} 
-		return false;
+		}
+		throw new UnsupportedOperationException("The element should have been detected as either smaller, larger or equal.");
 	} // add
 	
 	/**
@@ -143,7 +150,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 * @return
 	 * true if the element was added to the set.
 	 */
-	private boolean addWithComperator(T element, Node<T> subroot){
+	private boolean addWithComparator(T element, Node<T> subroot){
 		
 		T currVal = subroot.getValue();
 		if (comparator.compare(currVal, element) == 0){
@@ -156,7 +163,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				return true;
 				
 			} else {
-				return addWithComperator(element, leftChild);
+				return addWithComparator(element, leftChild);
 			}
 			
 		} else if (comparator.compare(currVal, element) < 0){
@@ -166,11 +173,11 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 				return true;
 				
 			} else {
-				return addWithComperator(element, rightChild);
+				return addWithComparator(element, rightChild);
 			}
 			
 		} 
-		return false;	
+		throw new UnsupportedOperationException("The element should have been detected as either smaller, larger or equal.");	
 	} //addWithComparator
 	
 	/**
@@ -249,7 +256,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		}
 		
 		if(root != null && comparator == null)
-			return containsWithComparable(root, element);
+			return contains(root, element);
 		else if (root != null)
 			return containsWithComparator(root, element);
 		else
@@ -268,7 +275,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	 * True if the element is present, otherwise false.
 	 * False if the root is empty. 
 	 */
-	private boolean containsWithComparable(Node<T> toSearch, T element){
+	private boolean contains(Node<T> toSearch, T element){
 		if(toSearch == null){
 			return false;
 		}
@@ -276,11 +283,11 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 			return true;
 		}
 		if(toSearch.getValue().compareTo(element) < 0){
-			return containsWithComparable(toSearch.getRightChild(), element);
+			return contains(toSearch.getRightChild(), element);
 		}else{ // > 0
-			return containsWithComparable(toSearch.getLeftChild(), element);
+			return contains(toSearch.getLeftChild(), element);
 		}
-	}//containsComparable
+	}//contains
 	
 	
 	/**
@@ -306,7 +313,7 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		}else{ // > 0
 			return containsWithComparator(toSearch.getLeftChild(), element);
 		}
-	}//containsComparator
+	}//containsWithComparator
 	
 	
 	/**
@@ -402,6 +409,10 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	
 	/**
 	 * Removes the supplied node from the tree.
+	 * Fetches the node's next largest neighbour and puts it in the 
+	 * removed nodes place. Walks down the tree so all links
+	 * can be connected in the correct order, this only happens if
+	 * the remove-node has two children.
 	 * 
 	 * @param currNode
 	 * - the node to remove from the tree.
@@ -415,7 +426,6 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		Node<T> rightChild = currNode.getRightChild();
 		
 		if (leftChild != null && rightChild != null){
-			//T newVal = removeSmallestValue( rightChild ); TODO
 			Node<T> smallestNode = removeSmallestValue( rightChild );
 			currNode.setValue( smallestNode.getValue() );
 			
@@ -547,6 +557,10 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		/**
 		 * Checks that the currentNode isn't the last one. If it is, returns false.
 		 * Also returns false if the set is empty. 
+		 * 
+		 * @return
+		 * True if the next node has a value, otherwise false.
+		 * False if the list is empty.
 		 */
 		public boolean hasNext() {
 			if(size == 0)
@@ -561,14 +575,21 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		 * Allows the next element to be retrieved if the currentNode is valid and no 
 		 * modifications has been made other than those made by the iterator.
 		 * Sets removalValid to true before returning the element. 
+		 * 
+		 * @throws
+		 * NoSuchElementException if there are no more elements in the set.
+		 * @throws
+		 * ConcurrentModificationException if the set has been modified by someone 
+		 * else than the iterator.
 		 */
 		public T next() {
 			if(!hasNext())
-				throw new java.util.NoSuchElementException();
+				throw new NoSuchElementException();
 			if(expectedCount != modCount)
-				throw new java.util.ConcurrentModificationException();
+				throw new ConcurrentModificationException();
 			removalValid = true;
 			currentNode = currentNode.getNextLargest();
+			
 			return currentNode.getValue();
 		}
 
@@ -578,12 +599,18 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		 * done, other than changes made by the iterator, the element is removed. 
 		 * After setting removalValid to false, forcing a call to next() before removing 
 		 * another element, expectedCount is incremented as is modCount in the list.  
+		 * 
+		 * @throws
+		 * IllegalStateException if a call to next() hasn't been done.
+		 * @throws
+		 * ConcurrentModificationException if the set has been modified by someone 
+		 * else than the iterator.
 		 */
 		public void remove() {
 			if(!removalValid)
 				throw new IllegalStateException();
 			if(expectedCount != modCount)
-				throw new java.util.ConcurrentModificationException();
+				throw new ConcurrentModificationException();
 			removalValid = false;
 			++expectedCount;
 			Node<T> temp = currentNode; 

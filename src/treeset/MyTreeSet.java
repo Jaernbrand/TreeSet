@@ -30,7 +30,8 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 	private int modCount;
 	
 	/**
-	 * Creates an empty MyTreeSet object.
+	 * Creates an empty MyTreeSet object. Any comparisons between elements will 
+	 * be done with the compareTo.
 	 */
 	public MyTreeSet(){
 		head = new Node<T>(null);

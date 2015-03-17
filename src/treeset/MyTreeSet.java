@@ -78,7 +78,6 @@ public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 		if (root == null){
 			root = new Node<T>(element);
 			addNewNodeToList(head, root);
-			addNewNodeToList(root, tail);
 			
 			++size;
 			++modCount;

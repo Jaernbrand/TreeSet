@@ -15,9 +15,7 @@ import java.util.NoSuchElementException;
  * - the datatype of the elements contained in the set
  * 
  * @author Henrik Järnbrand 
- * henrikjarnbrand@gmail.com
  * @author Tomas Sandberg 
- * tomassandberg86@hotmail.com
  */
 public class MyTreeSet<T extends Comparable<T> > implements Iterable<T>{
 

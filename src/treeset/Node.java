@@ -12,9 +12,7 @@ package treeset;
  * Generic type argument, represents the value to store in each node. 
  * 
  * @author Henrik Järnbrand 
- * henrikjarnbrand@gmail.com
- * @author Tomas Sandberg 
- * tomassandberg86@hotmail.com
+ * @author Tomas Sandberg
  */
 class Node<T> {
 
